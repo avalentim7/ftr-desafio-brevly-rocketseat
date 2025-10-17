@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getLinkBySlug, getOriginalUrl } from "../http";
 import { useLinksStore } from "../store/use-links-store";
 import logo from "../assets/Logo_Icon.svg";
 
 export function Redirect() {
   const { slug } = useParams<{ slug: string }>();
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
   const incrementLinkCount = useLinksStore((state) => state.incrementLinkCount);
 
   useEffect(() => {
     async function redirect() {
       if (!slug) {
-        setError("Link inválido");
+        navigate("/404");
         return;
       }
 
@@ -20,7 +20,7 @@ export function Redirect() {
         const link = await getLinkBySlug(slug);
 
         if (!link) {
-          setError("Link não encontrado ou expirado");
+          navigate("/404");
           return;
         }
 
@@ -32,30 +32,12 @@ export function Redirect() {
           window.location.href = originalUrl;
         }, 500);
       } catch {
-        setError("Link não encontrado ou expirado");
+        navigate("/404");
       }
     }
 
     redirect();
-  }, [slug, incrementLinkCount]);
-
-  if (error) {
-    return (
-      <div className="min-h-dvh flex flex-col items-center justify-center bg-gray-200 gap-8 px-4">
-        <img src={logo} alt="Brevly Logo" className="w-48" />
-        <div className="bg-white p-8 rounded-lg shadow-sm text-center">
-          <h1 className="text-2xl font-bold text-gray-700 mb-4">Oops!</h1>
-          <p className="text-gray-600">{error}</p>
-          <a
-            href="/"
-            className="mt-6 inline-block bg-blue-base text-white px-6 py-2 rounded-lg hover:bg-blue-dark transition-colors"
-          >
-            Voltar para home
-          </a>
-        </div>
-      </div>
-    );
-  }
+  }, [slug, incrementLinkCount, navigate]);
 
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center bg-gray-200 gap-8 px-4">
