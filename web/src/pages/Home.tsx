@@ -33,7 +33,6 @@ export function Home() {
         <img src={logo} alt="Brevly Logo" />
       </div>
       <div className="flex w-full gap-5 flex-col md:flex-row md:items-start">
-        {/* Card Novo Link - Esquerda no desktop, topo no mobile */}
         <div className="bg-white p-8 rounded-lg shadow-sm md:w-auto md:min-w-[400px]">
           <div className="flex items-center mb-6">
             <h3 className="text-gray-700 font-bold text-xl">Novo Link</h3>
@@ -41,7 +40,6 @@ export function Home() {
           <FormCreateShortenedUrl />
         </div>
 
-        {/* Card Meus Links - Direita no desktop, embaixo no mobile */}
         <div className="flex-1 flex flex-col">
           <ProgressBar isLoading={isExporting} />
           <div className="bg-white p-8 rounded-lg shadow-sm flex-1">
